@@ -48,7 +48,7 @@ library OrderLinkedList {
             point.head = NULL;
             point.tail = NULL;
         }
-
+=
         point.head = orderId;
     }
 }
