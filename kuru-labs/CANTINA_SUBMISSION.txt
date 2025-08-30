@@ -1,7 +1,7 @@
 # KURU CONTRACTS - SECURITY AUDIT FINDINGS
 # Comprehensive Bug Report for Cantina Competition
 # Date: August 28, 2025
-# Total Findings: 34 Vulnerabilities
+# Total Findings: 33 Vulnerabilities
 
 ==================================================
                  EXECUTIVE SUMMARY
@@ -9,8 +9,8 @@
 
 Project: Kuru Contracts - Fully On-Chain Central Limit Order Book (CLOB)
 Scope: Core contracts including OrderBook, MarginAccount, Router, KuruForwarder, and periphery contracts
-Total Vulnerabilities Found: 34
-- Critical: 9
+Total Vulnerabilities Found: 33
+- Critical: 8
 - High: 14  
 - Medium: 10
 - Low: 1
@@ -19,7 +19,7 @@ Risk Level: CRITICAL - DO NOT DEPLOY TO MAINNET
 Assets at Risk: Potentially millions in user funds
 
 ==================================================
-              CRITICAL VULNERABILITIES (9)
+              CRITICAL VULNERABILITIES (8)
 ==================================================
 
 [C-01] Division by Zero in Fee Calculations
@@ -48,8 +48,55 @@ Proof of Concept:
 
 Recommendation: Add zero checks before division operations
 
-[C-02] Unsafe External Call in Encoded Credits
-----------------------------------------------
+[C-02] Router Unlimited Approval Creates Systemic Fund Drainage Risk
+------------------------------------------------------------------
+File: Router.sol
+Lines: 307-317
+Severity: CRITICAL
+Impact: Complete router fund drainage
+
+Description:
+Router gives unlimited approvals to market contracts, creating systemic risk where any compromised market can drain all router funds.
+
+Code:
+```solidity
+function _setApprovalsForMarket(...) internal {
+    _baseAsset.safeApprove(_marketAddress, type(uint256).max); // UNLIMITED
+    _quoteAsset.safeApprove(_marketAddress, type(uint256).max); // UNLIMITED
+}
+```
+
+Proof of Concept:
+1. Deploy malicious market contract
+2. Market calls transferFrom to drain router tokens
+3. All router funds stolen
+
+Recommendation: Use exact approval amounts per transaction
+
+[C-03] Hash Collision in Meta-Transaction Nonce Handling
+-----------------------------------------------------------
+File: KuruForwarder.sol
+Lines: 174, 190, 265, 285
+Severity: CRITICAL
+Impact: Signature verification bypass
+
+Description:
+abi.encodePacked with different (address, nonce) pairs can produce same hash, bypassing nonce replay protection.
+
+Code:
+```solidity
+keccak256(abi.encodePacked(req.from, req.nonce)) // COLLISION RISK
+```
+
+Proof of Concept:
+1. address1 = 0x1234...7890, nonce1 = 0x1111
+2. address2 = 0x1234...78901111, nonce2 = 0x0
+3. Both produce same hash, bypassing nonce protection
+
+Recommendation: Use abi.encode() instead of abi.encodePacked()
+
+[C-04] Unsafe External Call in Encoded Credits  
+-------------------------------------------------
 File: MarginAccount.sol
 Lines: 137-154
 Severity: CRITICAL
@@ -79,7 +126,7 @@ Proof of Concept:
 
 Recommendation: Add loop limits and reentrancy guards
 
-[C-03] Missing Access Control in Fee Collection
+[C-05] Missing Access Control in Fee Collection
 -----------------------------------------------
 File: OrderBook.sol
 Lines: 846-851
@@ -107,7 +154,7 @@ Proof of Concept:
 
 Recommendation: Add access control to fee collection
 
-[C-04] Order ID Counter Overflow
+[C-06] Order ID Counter Overflow
 --------------------------------
 File: OrderBook.sol
 Lines: 1170-1172
@@ -130,7 +177,7 @@ Proof of Concept:
 
 Recommendation: Use uint256 for order IDs
 
-[C-05] AMM Vault Price Manipulation
+[C-07] AMM Vault Price Manipulation
 -----------------------------------
 File: AbstractAMM.sol
 Lines: 301-327
@@ -157,7 +204,7 @@ Proof of Concept:
 
 Recommendation: Add price validation against market bounds
 
-[C-06] Native Asset Handling Vulnerability
+[C-08] Native Asset Handling Vulnerability
 ------------------------------------------
 File: OrderBook.sol
 Lines: 827-832
@@ -182,32 +229,7 @@ Proof of Concept:
 
 Recommendation: Add underflow protection
 
-[C-07] Router Unlimited Approval Vulnerability
-----------------------------------------------
-File: Router.sol
-Lines: 307-317
-Severity: CRITICAL
-Impact: Complete router fund drainage
-
-Description:
-Router gives unlimited approvals to market contracts, creating systemic risk.
-
-Code:
-```solidity
-function _setApprovalsForMarket(...) internal {
-    _baseAsset.safeApprove(_marketAddress, type(uint256).max); // UNLIMITED
-    _quoteAsset.safeApprove(_marketAddress, type(uint256).max); // UNLIMITED
-}
-```
-
-Proof of Concept:
-1. Deploy malicious market contract
-2. Market calls transferFrom to drain router tokens
-3. All router funds stolen
-
-Recommendation: Use exact approval amounts per transaction
-
-[C-08] MonadDeployer Precision Loss
+[C-09] MonadDeployer Precision Loss
 -----------------------------------
 File: MonadDeployer.sol
 Lines: 78-84
@@ -229,28 +251,6 @@ Proof of Concept:
 3. Dev gets all 5 tokens instead of 1
 
 Recommendation: Use higher precision math
-
-[C-09] Hash Collision in Meta-Transactions
-------------------------------------------
-File: KuruForwarder.sol
-Lines: 174, 190, 265, 285
-Severity: CRITICAL
-Impact: Signature verification bypass
-
-Description:
-abi.encodePacked with different (address, nonce) pairs can produce same hash.
-
-Code:
-```solidity
-keccak256(abi.encodePacked(req.from, req.nonce)) // COLLISION RISK
-```
-
-Proof of Concept:
-1. address1 = 0x1234...7890, nonce1 = 0x1111
-2. address2 = 0x1234...78901111, nonce2 = 0x0
-3. Both produce same hash, bypassing nonce protection
-
-Recommendation: Use abi.encode() instead of abi.encodePacked()
 
 ==================================================
                 HIGH VULNERABILITIES (14)
@@ -616,8 +616,8 @@ Recommendation: Include timestamp or sender in salt
 
 CRITICAL SECURITY ASSESSMENT:
 
-Total Vulnerabilities: 34
-- 9 Critical (immediate deployment blockers)
+Total Vulnerabilities: 33
+- 8 Critical (immediate deployment blockers)
 - 14 High (significant risk issues)  
 - 10 Medium (important security concerns)
 - 1 Low (minor issue)
@@ -632,7 +632,7 @@ The Kuru Contracts system contains fundamental security flaws that make it unsui
 4. Meta-transaction security bypasses through hash collisions
 
 IMMEDIATE ACTIONS REQUIRED:
-1. Fix all 9 critical vulnerabilities
+1. Fix all 8 critical vulnerabilities
 2. Address 14 high-risk vulnerabilities  
 3. Implement comprehensive security testing
 4. Conduct multiple independent security audits
