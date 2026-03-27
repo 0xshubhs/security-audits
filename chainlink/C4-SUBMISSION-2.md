@@ -211,3 +211,49 @@ function testSubmissionValidity() public {
 - Expired report stored ($5,000 with `expiresAt` 1 hour in the past)
 - Premature report stored ($6,000 with `validFromTimestamp` 1 hour in the future)
 - Price replay succeeds ($4,500 overwritten by older $4,000, timestamp goes backwards)
+
+### PoC Test Results
+
+```
+forge test --match-contract PoC_H03 -vvv
+
+Ran 3 tests for test/poc/AllPoCs.t.sol:PoC_H03_ExpiredReportsAccepted
+[PASS] testPoC_H03_expiredReportAccepted() (gas: 57961)
+Logs:
+  VULNERABILITY CONFIRMED: Expired report accepted
+    - Report expiresAt: 601201
+    - Current time: 604801
+    - Report is 1 hour past expiry but was accepted
+    - New stored price: $ 5000
+
+[PASS] testPoC_H03_prematureReportAccepted() (gas: 57110)
+Logs:
+  VULNERABILITY CONFIRMED: Premature report accepted
+    - Report validFrom: 608401
+    - Current time: 604801
+    - Report isn't valid for 1 hour but was accepted
+
+[PASS] testSubmissionValidity() (gas: 188)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 17.96ms (1.31ms CPU time)
+
+Ran 1 test suite in 24.14ms (17.96ms CPU time): 3 tests passed, 0 failed, 0 skipped (3 total tests)
+```
+
+```
+forge test --match-contract PoC_M01 -vvv
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_M01_PriceReplay
+[PASS] testPoC_M01_olderPriceOverwritesNewer() (gas: 198074)
+Logs:
+  Price at T=0: $ 4000   timestamp: 604801
+  Price at T+30m: $ 4500   timestamp: 606601
+  Price after replay: $ 4000   timestamp: 605401
+  VULNERABILITY CONFIRMED: Older price ($4000) overwrote newer ($4500)
+    - No monotonic timestamp check in transmit()
+    - Any report within staleness window can overwrite current price
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 4.84ms (657.72µs CPU time)
+
+Ran 1 test suite in 6.36ms (4.84ms CPU time): 2 tests passed, 0 failed, 0 skipped (2 total tests)
+```

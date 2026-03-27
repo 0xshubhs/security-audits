@@ -184,3 +184,25 @@ function testSubmissionValidity() public {
 **Run:** `forge test --match-test testSubmissionValidity -vvv`
 
 **Expected output:** Test passes, proving `bid()` reverts on 1 USDC while `isValidSignature()` returns the ERC-1271 magic value `0x1626ba7e` for the same 1 USDC order.
+
+### PoC Test Results
+
+```
+forge test --match-contract PoC_H01 -vvv
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H01_CowSwapDustFill
+[PASS] testPoC_H01_isValidSignatureMissesMinBidCheck() (gas: 545056)
+Logs:
+  Auction USDC balance before: 100000000000
+  minBidUsdValue: 100000000000000000000
+  CONFIRMED: Direct bid() with 1 USDC REVERTS (below $100 minimum)
+  VULNERABILITY CONFIRMED: isValidSignature PASSES for 1 USDC order
+    - bid() rejects 1 USDC (below $100 minBidUsdValue)
+    - isValidSignature() accepts 1 USDC (no minBidUsdValue check)
+    - CowSwap solvers can bypass the dust protection
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 7.51ms (2.21ms CPU time)
+
+Ran 1 test suite in 9.52ms (7.51ms CPU time): 2 tests passed, 0 failed, 0 skipped (2 total tests)
+```
