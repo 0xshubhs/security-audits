@@ -1,0 +1,16 @@
+Compiling 33 files with Solc 0.8.26
+Solc 0.8.26 finished in 2.90s
+Compiler run successful!
+
+Ran 8 tests for test/poc/InvariantFuzz.t.sol:InvariantFuzz
+[PASS] testFuzz_auctionCurveNeverExceedsMaxDiscount(uint256,uint256) (runs: 256, μ: 403338, ~: 404657)
+[PASS] testFuzz_bidNeverDrainsExtraTokens(uint256) (runs: 256, μ: 606819, ~: 606868)
+[PASS] testFuzz_noValueLeakDuringAuction(uint256) (runs: 256, μ: 669683, ~: 669796)
+[PASS] testFuzz_priceMultiplierBounded(uint256) (runs: 256, μ: 408989, ~: 410004)
+[PASS] testFuzz_roundingFavorsProtocol(uint256,uint256) (runs: 256, μ: 394110, ~: 395120)
+[PASS] testFuzz_unprivilegedCannotStartAuction() (gas: 243496)
+[PASS] testFuzz_unprivilegedCannotTransmitPrices() (gas: 15922)
+[PASS] testSubmissionValidity() (gas: 233)
+Suite result: ok. 8 passed; 0 failed; 0 skipped; finished in 237.21ms (913.40ms CPU time)
+
+Ran 1 test suite in 243.64ms (237.21ms CPU time): 8 tests passed, 0 failed, 0 skipped (8 total tests)

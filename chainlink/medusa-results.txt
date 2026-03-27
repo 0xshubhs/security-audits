@@ -1,0 +1,119 @@
+[1m[32m⇾[0m[0m [1mReading the configuration file at: [1m/home/madhav/Desktop/security/2026-03-chainlink/medusa.json[0m[0m
+[1m[32m⇾[0m[0m [1mCompiling targets with [1mcrytic-compile[0m[0m
+[1m[32m⇾[0m[0m [1mRunning command:
+/home/madhav/.local/bin/crytic-compile . --export-format solc --foundry-compile-all[0m
+[1m[32m⇾[0m[0m [1mFinished compiling targets in 27s[0m
+[1m[32m⇾[0m[0m [1m[1martifacts: [0mMedusa is running against a [1m[32mnew[0m[0m set of build artifacts[0m
+[1m[32m⇾[0m[0m [1mNo Slither cached results found at slither_results.json[0m
+[1m[32m⇾[0m[0m [1mRunning Slither:
+/home/madhav/.local/bin/slither . --ignore-compile --print echidna --json -[0m
+[1m[32m⇾[0m[0m [1mFinished running Slither in 1m6s[0m
+[1m[32m⇾[0m[0m [1mRunning with a timeout of [1m120[0m[1m seconds[0m[0m
+[1m[32m⇾[0m[0m [1mSetting up test chain[0m
+[1m[32m⇾[0m[0m [1mFinished setting up test chain[0m
+[1m[32m⇾[0m[0m [1mCreating corpus...[0m
+[1m[32m⇾[0m[0m [1mFuzzing with [1m4[0m workers[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_roundingFavorsProtocol(uint256,uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeContracts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeSenders()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.feeAggregator()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWBTC()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.owner()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.assetAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUniswapQuoterV2()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUniswapRouter()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.orderManager()[0m[0m
+[1m[32m⇾[0m[0m [1m[1mfuzz: [0melapsed: [1m      0s[0m, calls: [1m         0 (     0/sec)[0m, seq/s: [1m     0[0m, branches: [1m    25[0m, corpus: [1m    0[0m, failures: [1m0/0[0m, gas/s: [1m           0[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetArtifacts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeArtifacts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.forwarder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockStreamsVerifierProxy()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUsdcUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_auctionCurveNeverExceedsMaxDiscount(uint256,uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.workflowRouter()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.IS_TEST()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.auctionAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.auctionBidder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.failed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.reserves()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetInterfaces()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_unprivilegedCannotStartAuction()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testSubmissionValidity()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.auction()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockGPV2Settlement()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUSDC()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.pauser()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetArtifactSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_noValueLeakDuringAuction(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_priceMultiplierBounded(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.bidder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockLINK()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.setUp()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetContracts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_unprivilegedCannotTransmitPrices()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.gpV2VaultRelayer()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockLinkUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWethUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.priceAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.targetSenders()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.unpauser()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.attacker()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWETH()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[NOT STARTED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_bidNeverDrainsExtraTokens(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1mfuzz: [0melapsed: [1m      3s[0m, calls: [1m     40438 ( 13476/sec)[0m, seq/s: [1m   133[0m, branches: [1m   362[0m, corpus: [1m   31[0m, failures: [1m0/402[0m, gas/s: [1m   783045962[0m[0m
+[1m[32m⇾[0m[0m [1m[1mfuzz: [0melapsed: [1m      6s[0m, calls: [1m     80309 ( 13283/sec)[0m, seq/s: [1m   132[0m, branches: [1m   403[0m, corpus: [1m   42[0m, failures: [1m0/801[0m, gas/s: [1m   790773239[0m[0m
+[1m[32m⇾[0m[0m [1mTransaction test limit reached, halting now...[0m
+[1m[32m⇾[0m[0m [1mFuzzer stopped, test results follow below ...[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.IS_TEST()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.assetAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.attacker()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.auction()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.auctionAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.auctionBidder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.bidder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeArtifacts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeContracts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.excludeSenders()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.failed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.feeAggregator()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.forwarder()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.gpV2VaultRelayer()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockGPV2Settlement()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockLINK()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockLinkUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockStreamsVerifierProxy()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUSDC()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUniswapQuoterV2()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUniswapRouter()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockUsdcUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWBTC()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWETH()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.mockWethUsdFeed()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.orderManager()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.owner()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.pauser()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.priceAdmin()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.reserves()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.setUp()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetArtifactSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetArtifacts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetContracts()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetInterfaces()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetSelectors()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.targetSenders()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_auctionCurveNeverExceedsMaxDiscount(uint256,uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_bidNeverDrainsExtraTokens(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_noValueLeakDuringAuction(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_priceMultiplierBounded(uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_roundingFavorsProtocol(uint256,uint256)[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_unprivilegedCannotStartAuction()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testFuzz_unprivilegedCannotTransmitPrices()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.testSubmissionValidity()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.unpauser()[0m[0m
+[1m[32m⇾[0m[0m [1m[1m[32m[PASSED] [0m[0m[1mAssertion Test: InvariantFuzz.workflowRouter()[0m[0m
+[1m[32m⇾[0m[0m [1mTest summary: [1m[32m48[0m[0m test(s) passed, [1m[31m0[0m[0m test(s) failed[0m
+[1m[32m⇾[0m[0m [1mhtml report(s) saved to: medusa-corpus/coverage/coverage_report.html[0m
+[1m[32m⇾[0m[0m [1mlcov report(s) saved to: medusa-corpus/coverage/lcov.info[0m

@@ -1,0 +1,136 @@
+No files changed, compilation skipped
+
+Ran 3 tests for test/poc/AllPoCs.t.sol:PoC_H03_ExpiredReportsAccepted
+[PASS] testPoC_H03_expiredReportAccepted() (gas: 57961)
+Logs:
+  VULNERABILITY CONFIRMED: Expired report accepted
+    - Report expiresAt: 601201
+    - Current time: 604801
+    - Report is 1 hour past expiry but was accepted
+    - New stored price: $ 5000
+
+[PASS] testPoC_H03_prematureReportAccepted() (gas: 57110)
+Logs:
+  VULNERABILITY CONFIRMED: Premature report accepted
+    - Report validFrom: 608401
+    - Current time: 604801
+    - Report isn't valid for 1 hour but was accepted
+
+[PASS] testSubmissionValidity() (gas: 188)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 9.68ms (1.68ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H02_DecimalMisconfiguration
+[PASS] testPoC_H02_decimalMisconfigInflatesPrices() (gas: 86692)
+Logs:
+  Correct WETH price (18 decimals): 4000000000000000000000
+  Inflated WETH price: 40000000000000000000000000000000
+  VULNERABILITY CONFIRMED: Price inflated by factor of: 10000000000
+    - Correct: $4,000
+    - Inflated: $ 40000000000000
+    - All auction economics are now broken
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 10.59ms (837.95µs CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_M01_PriceReplay
+[PASS] testPoC_M01_olderPriceOverwritesNewer() (gas: 198074)
+Logs:
+  Price at T=0: $ 4000   timestamp: 604801
+  Price at T+30m: $ 4500   timestamp: 606601
+  Price after replay: $ 4000   timestamp: 605401
+  VULNERABILITY CONFIRMED: Older price ($4000) overwrote newer ($4500)
+    - No monotonic timestamp check in transmit()
+    - Any report within staleness window can overwrite current price
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 10.80ms (2.21ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H06_ForwarderEscalation
+[PASS] testPoC_H06_forwarderForcesAuctionEnd() (gas: 380808)
+Logs:
+  USDC auction started at: 604801
+  Auction duration: 86400
+  VULNERABILITY CONFIRMED: Forwarder force-ended auction at time 0
+    - Auction was supposed to last 1 day
+    - Forwarder ended it immediately
+    - 100,000 USDC returned to FeeAggregator without being auctioned
+    - performUpkeep doesn't validate expiry for ended auctions
+    - FORWARDER_ROLE effectively has FULL auction control
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 12.03ms (2.20ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_M03_NoSlippage
+[PASS] testPoC_M03_bidderOverpaysAfterPriceChange() (gas: 679761)
+Logs:
+  Expected LINK cost at current price: 2625
+  Actual LINK cost after price change: 5250
+  VULNERABILITY CONFIRMED: No slippage protection
+    - Expected cost: 2625 LINK
+    - Actual cost: 5250 LINK
+    - Overpayment: 2625 LINK
+    - bid() has no maxAssetOutAmount parameter
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 13.43ms (5.06ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H01_CowSwapDustFill
+[PASS] testPoC_H01_isValidSignatureMissesMinBidCheck() (gas: 545056)
+Logs:
+  Auction USDC balance before: 100000000000
+  minBidUsdValue: 100000000000000000000
+  CONFIRMED: Direct bid() with 1 USDC REVERTS (below $100 minimum)
+  VULNERABILITY CONFIRMED: isValidSignature PASSES for 1 USDC order
+    - bid() rejects 1 USDC (below $100 minBidUsdValue)
+    - isValidSignature() accepts 1 USDC (no minBidUsdValue check)
+    - CowSwap solvers can bypass the dust protection
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 13.74ms (3.29ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H05_CallbackDrain
+[PASS] testPoC_H05_bidderRoleDrainsTokens() (gas: 797657)
+Logs:
+  AuctionBidder WETH balance before: 10
+  AuctionBidder WETH after: 0
+  Thief WETH balance: 10
+  VULNERABILITY CONFIRMED: AUCTION_BIDDER_ROLE drained 10 WETH
+    - AUCTION_BIDDER_ROLE is lower privilege than DEFAULT_ADMIN
+    - But callback allows arbitrary calls from contract context
+    - withdraw() requires DEFAULT_ADMIN, callback bypasses this
+
+[PASS] testSubmissionValidity() (gas: 188)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 18.25ms (6.44ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H04_AtomicPerformUpkeepFailure
+[PASS] testPoC_H04_staleAssetBlocksAllOperations() (gas: 758513)
+Logs:
+  LINK accumulated in auction: 1100
+  WETH price valid: false
+  VULNERABILITY CONFIRMED: performUpkeep reverts with stale WETH
+  DESIGN ISSUE PROVEN:
+    - performUpkeep processes ALL eligible assets atomically
+    - ONE stale price reverts the ENTIRE batch
+    - Ended auctions in the same batch also fail to close
+    - LINK from bids remains locked until ALL prices are fresh
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 19.04ms (4.81ms CPU time)
+
+Ran 2 tests for test/poc/AllPoCs.t.sol:PoC_H07_StaleApproval
+[PASS] testPoC_H07_approvalExceedsBalanceAfterBid() (gas: 618384)
+Logs:
+  Initial vault relayer approval: 100000 USDC
+  Initial auction balance: 100000 USDC
+  After bid - vault relayer approval: 100000 USDC
+  After bid - auction balance: 50000 USDC
+  VULNERABILITY CONFIRMED: Stale approval after direct bid
+    - Approval:  100000 USDC
+    - Balance:   50000 USDC
+    - Over-approval: 50000 USDC
+    - If tokens are deposited, vault relayer can transfer up to approval
+
+[PASS] testSubmissionValidity() (gas: 166)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 19.12ms (3.20ms CPU time)
+
+Ran 9 test suites in 27.05ms (126.68ms CPU time): 19 tests passed, 0 failed, 0 skipped (19 total tests)
