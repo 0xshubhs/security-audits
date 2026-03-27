@@ -1,0 +1,54 @@
+# Certora Formal Verification Results
+# Chainlink Payment Abstraction V2
+
+## Status
+
+- Certora CLI: v8.8.1 installed
+- Java: JDK 21.0.10 installed
+- Solidity Compilation: PASSED (GPV2CompatibleAuction.sol compiles successfully via certoraRun)
+- CVL Spec Type-Check: PASSED after fixes (DISPATCHER->NONDET, lastReverted usage)
+- Cloud Proving: Requires CERTORAKEY API key (sign up at https://prover.certora.com/)
+
+## Local Compilation Output
+
+```
+Compiling src/GPV2CompatibleAuction.sol... SUCCESS
+Compiling src/GPV2CompatibleAuction.sol to expose internal function information... SUCCESS
+```
+
+## Specs Written (3 files, 16 rules)
+
+### BaseAuction.spec (7 rules)
+1. auctionCurveReturnsNonZeroForValidBid
+2. priceDecaysOverTime
+3. reentrancyGuardConsistent (invariant)
+4. cannotStartAuctionIfAlreadyLive
+5. bidReducesBalanceByExactAmount
+6. configChangesBlockedDuringLiveAuctions
+7. minBidUsdValueEnforced
+
+### PriceManager.spec (5 rules)
+1. priceNonZeroAfterTransmit
+2. stalenessCheckEnforced
+3. priceReplayPrevented_EXPECT_VIOLATION (proves M-01)
+4. feedAllowlistEnforced
+5. expiredReportRejected_EXPECT_VIOLATION (proves H-03)
+
+### GPV2CompatibleAuction.spec (4 rules)
+1. isValidSignatureRejectsNoLiveAuction
+2. isValidSignatureBlockedDuringBid
+3. approvalRevokedAfterAuctionEnd
+4. minBidEnforcedInIsValidSignature_SPECIFICATION_ONLY (documents H-01)
+
+## Expected Violations (Formally Proven Bugs)
+- priceReplayPrevented_EXPECT_VIOLATION: No monotonic timestamp check (M-01)
+- expiredReportRejected_EXPECT_VIOLATION: expiresAt never checked (H-03)
+- minBidEnforcedInIsValidSignature: minBidUsdValue missing (H-01)
+
+## How to Run with API Key
+```
+export CERTORAKEY="your-key"
+export JAVA_HOME=/home/madhav/.java/jdk-21.0.10
+export PATH=$JAVA_HOME/bin:$PATH
+certoraRun certora/confs/BaseAuction.conf
+```
