@@ -1,0 +1,69 @@
+>>> Cloning [T1] next.js from https://github.com/vercel/next.js
+Cloning into 'next.js'...
+DONE  [T1] next.js
+>>> Cloning [T1] nuxt from https://github.com/nuxt/nuxt
+Cloning into 'nuxt'...
+DONE  [T1] nuxt
+>>> Cloning [T1] swr from https://github.com/vercel/swr
+Cloning into 'swr'...
+DONE  [T1] swr
+>>> Cloning [T1] svelte from https://github.com/sveltejs/svelte
+Cloning into 'svelte'...
+DONE  [T1] svelte
+>>> Cloning [T1] turborepo from https://github.com/vercel/turborepo
+Cloning into 'turborepo'...
+DONE  [T1] turborepo
+>>> Cloning [T1] ai from https://github.com/vercel/ai
+Cloning into 'ai'...
+DONE  [T1] ai
+>>> Cloning [T1] vercel-cli from https://github.com/vercel/vercel
+Cloning into 'vercel-cli'...
+DONE  [T1] vercel-cli
+>>> Cloning [T1] workflow from https://github.com/vercel/workflow
+Cloning into 'workflow'...
+DONE  [T1] workflow
+>>> Cloning [T1] flags from https://github.com/vercel/flags
+Cloning into 'flags'...
+DONE  [T1] flags
+>>> Cloning [T1] nitro from https://github.com/nitrojs/nitro
+Cloning into 'nitro'...
+DONE  [T1] nitro
+>>> Cloning [T1] agent-skills from https://github.com/vercel-labs/agent-skills
+Cloning into 'agent-skills'...
+DONE  [T1] agent-skills
+>>> Cloning [T1] skills from https://github.com/vercel-labs/skills
+Cloning into 'skills'...
+DONE  [T1] skills
+>>> Cloning [T2] ms from https://github.com/vercel/ms
+Cloning into 'ms'...
+DONE  [T2] ms
+>>> Cloning [T2] sveltekit from https://github.com/sveltejs/kit
+Cloning into 'sveltekit'...
+DONE  [T2] sveltekit
+>>> Cloning [T2] eve from https://github.com/vercel/eve
+Cloning into 'eve'...
+DONE  [T2] eve
+>>> Cloning [T2] chat from https://github.com/vercel/chat
+Cloning into 'chat'...
+DONE  [T2] chat
+
+====================================
+Cloned OK: 16 | Skipped: 0 | Failed: 0
+Disk usage:
+524K	ms/
+1.8M	skills/
+3.2M	swr/
+9.0M	nitro/
+9.7M	agent-skills/
+17M	nuxt/
+25M	chat/
+26M	flags/
+29M	sveltekit/
+42M	eve/
+42M	workflow/
+59M	svelte/
+140M	ai/
+169M	turborepo/
+251M	vercel-cli/
+361M	next.js/
+ALL-CLONES-COMPLETE

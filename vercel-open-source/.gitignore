@@ -1,0 +1,8 @@
+# Cloned third-party target repos (1.2GB) — regenerate with repos/clone-all.sh
+repos/*/
+# but keep the clone script + log
+!repos/clone-all.sh
+!repos/clone.log
+
+# PoC dependencies — regenerate with `npm install` in each poc dir
+**/node_modules/

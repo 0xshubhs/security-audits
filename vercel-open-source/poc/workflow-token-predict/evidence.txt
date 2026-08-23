@@ -1,0 +1,20 @@
+=== Workflow SDK predictable webhook-token PoC ===
+(seedrandom@undefined, nanoid@5.1.6)
+
+[server]   createWebhook() minted token: MtpVnQRjjBt91NhS-Seth
+[server]   public URL: /.well-known/workflow/v1/webhook/MtpVnQRjjBt91NhS-Seth
+
+[attacker] knows only runId + workflowName + deploymentId (all non-secret)
+[attacker] re-derived token:             MtpVnQRjjBt91NhS-Seth
+[attacker] MATCH: YES — token forged without ever seeing it
+
+If the token is not the first draw, the attacker enumerates a small offset range:
+  offset 0 -> MtpVnQRjjBt91NhS-Seth
+  offset 1 -> SMtpVnQRjjBt91NhS-Set
+  offset 2 -> YSMtpVnQRjjBt91NhS-Se
+  offset 3 -> yYSMtpVnQRjjBt91NhS-S
+  offset 4 -> AyYSMtpVnQRjjBt91NhS-
+
+The 21-char token LOOKS like ~125 bits of entropy but is fully determined by a
+non-secret seed. Fix: mint the token from a host CSPRNG on first execution and read
+it back from the persisted hook_created event on replay (world/src/hooks.ts already stores it).

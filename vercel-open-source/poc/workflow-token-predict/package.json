@@ -1,0 +1,1 @@
+{"name":"workflow-token-predict-poc","private":true,"type":"commonjs","version":"1.0.0","dependencies":{"nanoid":"^5.1.6","seedrandom":"^3.0.5"}}

@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "remoteCache": {
+    "enabled": true,
+    "apiUrl": "http://127.0.0.1:9099",
+    "teamId": "team_attacker_controlled"
+  },
+  "tasks": { "build": { "outputs": ["dist/**"] } }
+}
