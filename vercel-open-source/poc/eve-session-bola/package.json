@@ -1,0 +1,7 @@
+{
+  "name": "eve-session-bola-poc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": { "eve": "0.44.4" }
+}

@@ -62,3 +62,46 @@ user's session ID) and show you executed an unapproved tool / read another owner
 
 ## TODO: verify index.ts:485 myself + build PoC (POST forged Update to the webhook, no secret set).
 ## Status: CONFIRMED (agent) — self-verify + PoC pending.
+
+## ✅ VERIFIED FINDING (2026-08-26): Telegram webhook fail-open by default (CWE-306)
+`packages/adapter-telegram/src/index.ts` `handleWebhook()`:
+- L485-509: if `this.secretToken` unset → **logs one warning and proceeds** (no rejection).
+- L525-563: the dedup / bot-identity guard is ALSO gated on `this.secretToken`, so with no token
+  the request skips straight to L566 `processUpdate(update)` with a fully attacker-controlled body.
+- `processUpdate` routes forged updates: `message`→`chat.handleIncomingMessage`,
+  `callback_query`→`chat.handleAction`, `message_reaction`→`handleReaction`, etc.
+- `secretToken` defaults to `TELEGRAM_WEBHOOK_SECRET_TOKEN` env (types.ts:38) — OPTIONAL.
+
+Impact: an attacker who reaches the webhook path (default `/api/webhooks/telegram`) can inject
+updates that appear to come from ANY Telegram user/chat — forge `from.id`, `chat.id`, text,
+commands, callback_data — driving the bot to act on unauthenticated input / impersonate an admin
+for bot commands / poison thread state. No auth required.
+
+Cross-adapter contrast (this is the crux — Telegram is the LONE fail-open adapter):
+- Slack: throws at construction if no signingSecret/webhookVerifier (index.ts:971-976) — fail-closed.
+- Messenger: `appSecret` REQUIRED, factory throws if absent (index.ts:940-943); always HMAC-verifies.
+- WhatsApp: `verifySignature` returns false when no `x-hub-signature-256` → 401 (index.ts:378,482).
+- Twilio: signature header required, throws → 401 (webhook/verify.ts:30-33,47-48).
+- Discord: Ed25519 publicKey verification.
+Every other adapter refuses to process an unverified webhook; Telegram silently processes it.
+
+Triage risk (MODERATE — file AFTER the 2 clean ones): Telegram's Bot API has no payload signature
+(unlike the HMAC adapters), so its only auth is the optional secret_token + URL secrecy, and the
+adapter AGENTS.md/docs say "secret_token is the only line of defence — do not skip configuring it
+in production." A triager could close as "inherent to Telegram / documented." COUNTER for the
+report: the framework's own contract (every sibling adapter) is "refuse unverified webhooks";
+Telegram breaks it by default. Fix is trivial + consistent: throw in webhook mode when no
+secretToken (mirror Slack), or require explicit opt-out. Class = CWE-306 Missing Authentication.
+Stronger bet than the workflow finding (recognized vuln class, not a "not a security contract"
+disclaimer), but weaker than Turborepo/AI-SDK. Verdict: CANDIDATE #3 — needs PoC + dup check.
+
+## LEAD (2026-08-26, not yet confirmed): ai/scope.ts read-scope confinement differential
+`src/ai/scope.ts` `createScopeGuard` confines AI read-tools to the active conversation's channel.
+`channelOf()` resolves a channel from an id via `adapter.channelIdFromThreadId?.(id)` and FALLS BACK
+to `id.split(":").slice(0,2).join(":")` when the adapter or that method is absent/returns undefined.
+Possible bypass: a crafted target `id` (model-supplied, e.g. prompt injection) where the fallback
+string-slice yields `targetChannel === activeChannel` while the raw id, passed to the actual read
+sink, points into a DIFFERENT real channel/thread → cross-channel read (IDOR). Requires a concrete
+adapter whose `channelIdFromThreadId` normalization differs from the naive slice AND a read tool that
+uses the raw id. Soft trust boundary (prompt-injected model), adapter-specific. NEEDS a concrete
+adapter + read-sink trace to confirm/kill. Lower priority than the telegram finding.

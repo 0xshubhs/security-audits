@@ -6,3 +6,7 @@ repos/*/
 
 # PoC dependencies — regenerate with `npm install` in each poc dir
 **/node_modules/
+
+# PoC build/runtime artifacts
+**/.turbo/
+**/*.out

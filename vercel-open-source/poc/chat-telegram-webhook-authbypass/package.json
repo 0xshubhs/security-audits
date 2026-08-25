@@ -1,0 +1,12 @@
+{
+  "name": "chat-telegram-webhook-authbypass-poc",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "PoC: @chat-adapter/telegram processes unauthenticated, attacker-forged webhook updates when no secret token is configured (CWE-306).",
+  "dependencies": {
+    "chat": "*",
+    "@chat-adapter/telegram": "4.38.1",
+    "@chat-adapter/state-memory": "*"
+  }
+}
