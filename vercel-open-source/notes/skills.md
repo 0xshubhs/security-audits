@@ -95,4 +95,32 @@ access. Read the execution/trust model, not individual skill content.
   reachable with default flags. Frame as file-disclosure, not path-traversal-write. Lower value than
   a write bug; may be argued as known (maintainers handle broken-symlink cleanup at :497).
 
-## Status: DONE (first pass) — write bug DEAD; symlink-deref READ is the only residual (needs PoC).
+## ✅ CONFIRMED (2026-08-31) — arbitrary local file READ via symlink dereference (CWE-59 → CWE-200)
+WORKING PoC on published **skills@1.5.23**: `poc/skills-symlink-fileread/` (`bash poc.sh`, self-contained).
+- Mechanism: `copyDirectory(..., {dereference:true})` (installer.ts:487-494) FOLLOWS symlinks and copies
+  the TARGET's contents; only ENOENT/broken symlinks are skipped (installer.ts:498-506). No realpath/
+  target confinement. Same in `copySkillDirectory` (use.ts:594). The `isPathSafe`/`sanitizeName` guards
+  (installer.ts:303-319) validate the destination NAME, not symlink targets.
+- Reachability (CORRECTED — stronger than first stated): the SAFE blob/API path is FIRST-PARTY ONLY
+  (`BLOB_ALLOWED_OWNERS=['vercel','vercel-labs','heygen-com']` + self-hosted allowlist, add.ts:1182-1203).
+  ANY third-party `github.com owner/repo` (what an attacker publishes) has that `if` false → blobResult
+  null → `else` calls `cloneRepo` UNCONDITIONALLY (add.ts:1208-1218). So the canonical
+  `skills add attacker/evil-skill` ALWAYS clones → symlinks preserved (mode 120000) → copyDirectory
+  dereferences. No API-failure precondition. git/gitlab/SSH URLs + `--full-depth` also always clone;
+  local installs copy directly. (First-party repos additionally fall back to clone on blob failure.)
+- PoC proves: malicious skill repo w/ `references/stolen-key -> /abs/victim/id_rsa` and
+  `host-name -> ../../../../etc/hostname` → after `skills add`, both are REAL FILES in
+  `~/.claude/skills/<skill>/references/` containing the victim key + /etc/hostname. `/proc/self/environ`
+  target leaks the CLI process env (tokens) with no path knowledge.
+- Impact: installing an untrusted community skill (the tool's PRIMARY use case) silently exfiltrates
+  arbitrary user-readable host files into an agent-readable + often-committed location. No prior compromise.
+- DUP/NOVELTY (honest): NO GHSA/CVE for vercel-labs/skills, NO tracked repo security issue. The technique
+  is PUBLICLY BLOGGED against Vercel's tool ("Agent SkillSlip", oddguan.com) — BUT that post WRONGLY marks
+  it fixed, crediting PR #108 (which ADDED dereference:true = the CAUSE) as the fix. Still live on 1.5.23
+  (PoC). Same class accepted for sibling tool `skilo` GHSA-6xx4-9wp6-65p7 (fixed by REJECTING symlinks).
+  → Filable framing = "incomplete/incorrect fix, still exploitable on latest." Signal risk ELEVATED by the
+  public blog → rank BELOW the 2 clean reports (turbo, ai-sdk). MED(-HIGH) impact.
+- Fix: reject symlink entries (like skilo) OR realpath-confine targets to the skill root, in BOTH
+  copyDirectory + copySkillDirectory.
+
+## Status: DONE — symlink-deref READ **CONFIRMED + PoC** (filable w/ elevated Signal risk); write bug DEAD.

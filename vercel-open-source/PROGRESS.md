@@ -112,3 +112,44 @@ Telegram class precedent = GHSA-mp5h-m6qj-6292 (openclaw, HIGH). eve session-aut
 
 ## Submitted reports
 _None yet. Format: date | H1 report link | target | severity | status | bounty._
+
+## New findings this session (2026-08-31) — fresh deep-hunt on skills / chat-adapters / sveltekit / workflow
+- 2026-08-31 | skills | installer.ts:487 (copyDirectory) + use.ts:594 + add.ts:1200-1223 | ✅ CONFIRMED
+  + WORKING PoC on published skills@1.5.23 (poc/skills-symlink-fileread/). Arbitrary local file READ via
+  symlink dereference in a malicious skill: `cp {dereference:true}` follows symlinks to abs paths / ../
+  traversal / /proc/self/environ; only broken (ENOENT) symlinks skipped; no target confinement. Reachable
+  by the CANONICAL `skills add owner/repo`: safe blob path is FIRST-PARTY ONLY (BLOB_ALLOWED_OWNERS=
+  vercel/vercel-labs/heygen-com, add.ts:1182-1203); ANY third-party github repo clones unconditionally
+  (else-branch :1208-1218). Also git/gitlab/SSH URLs + --full-depth + local installs. Impact: install
+  untrusted skill (PRIMARY use case) → SSH/cloud/.env/env-token contents
+  copied into ~/.claude/skills/<skill>/ (agent-readable + often committed). CWE-59→200. MED(-HIGH).
+  DUP: no GHSA/CVE, no tracked repo issue; PUBLICLY BLOGGED ("Agent SkillSlip", oddguan.com) but WRONGLY
+  marked fixed (credits PR #108 = the CAUSE). Filable as "incomplete fix, still live on 1.5.23"; Signal
+  risk ELEVATED by the blog → rank BELOW turbo/ai-sdk. Sibling precedent: skilo GHSA-6xx4-9wp6-65p7. BEST
+  NEW candidate by impact+reachability.
+- 2026-08-31 | chat | adapter-discord/src/index.ts:368 | ✅ VERIFIED: timing-unsafe `!==` on bot token gates
+  the x-discord-gateway-token forwarded-gateway branch (:362-378) that BYPASSES Ed25519 → inject
+  GATEWAY_MESSAGE_CREATE with attacker author/channel/content (handleForwardedGatewayEvent :907). Bot token
+  reused as shared secret (:2510). DIFFERENTIAL: maintainers fixed identical pattern in Slack
+  (timingSafeStringEqual, adapter-slack index.ts:106/1680; CHANGELOG:329 changeset 9824d33 = HIGH) but
+  MISSED Discord. CWE-208/345. Practical exploit = remote timing oracle (WEAK) → file on differential
+  narrative not a PoC. Realistic Low-Med. SECONDARY candidate. No fail-open (resolveBotToken throws).
+- 2026-08-31 | sveltekit | runtime/server/respond.js:321 | LEAD: reroute→prerender loopback SSRF via
+  Host-derived request.url → global fetch, no origin allowlist; paths.origin does NOT close it. CWE-918.
+  On 3.0.0-next.25 (PRERELEASE — verify stable 2.x). Precond: reroute hook to a prerendered path + Host
+  controllability. Triage-risky (host-header guidance overlap). Verify+dup before filing. Weakest survivor.
+- 2026-08-31 | workflow | (full HTTP-surface sweep) | CLEARED — nothing new beyond known items. Engine
+  deliberately avoids eve-style pitfalls: webhook token = authN+authZ bound to ONE hook (no separate runId
+  → no BOLA), origins env-derived (no Host poisoning), NO bypass-secret in callback URLs (grep BYPASS empty),
+  deserialization registry-scoped + QuickJS-sandboxed, no self-shipped HMAC to fail open. Only informational
+  version-disclosure via GET /.well-known/workflow/v1/flow?__health (not worth a slot). Web dashboard RPC is
+  BOLA-shaped but default-off + docs "place behind your own auth". @workflow/core 5.0.0-beta.44.
+
+## Updated candidate ranking (2026-08-31)
+1. Turborepo token exfil — HIGH, clean, PoC+report ready (SUBMISSION-1). FILE FIRST.
+2. AI SDK MCP OAuth SSRF — MED, clean, PoC+report ready (SUBMISSION-2). FILE SECOND.
+3. chat Telegram fail-open — MED, PoC ready (poc/chat-telegram-webhook-authbypass/), not a vercel/chat dup.
+4. skills symlink file-read — MED(-HIGH) impact, WORKING PoC on latest, but publicly-blogged (elevated Signal
+   risk) → file as "incomplete fix" only if appetite for the dup risk; strong impact/reachability otherwise.
+5. chat Discord timing `!==` — MED narrative / LOW practical (timing oracle). File on differential only.
+6. sveltekit reroute SSRF — LEAD, needs stable-2.x verify + dup. eve BOLA = DUP (#1130, do not file).

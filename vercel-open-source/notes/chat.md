@@ -105,3 +105,32 @@ sink, points into a DIFFERENT real channel/thread → cross-channel read (IDOR).
 adapter whose `channelIdFromThreadId` normalization differs from the naive slice AND a read tool that
 uses the raw id. Soft trust boundary (prompt-injected model), adapter-specific. NEEDS a concrete
 adapter + read-sink trace to confirm/kill. Lower priority than the telegram finding.
+
+## ✅ FINDING (2026-08-31, VERIFIED in source) — Discord adapter: timing-unsafe `!==` on the bot token gates an Ed25519-bypassing injection entry
+Class: CWE-208 (observable timing discrepancy / non-constant-time secret compare); impact-if-bypassed
+CWE-345 (message/identity spoofing). Adapter @chat-adapter/discord 4.38.1.
+- `packages/adapter-discord/src/index.ts:368` — `if (gatewayToken !== botToken)` — native JS `!==`
+  (short-circuits at first differing byte) is the ONLY gate on the `x-discord-gateway-token` forwarded-
+  gateway branch (:362-378), which is an ALTERNATE webhook entry that SKIPS Ed25519 and dispatches
+  GATEWAY_MESSAGE_CREATE/REACTION straight into handleForwardedGatewayEvent (:907) → chat.processMessage
+  with attacker-chosen author/channel/content. Bot token is reused AS the shared secret (:2510
+  `x-discord-gateway-token: botToken`).
+- STRONG DIFFERENTIAL (verified): maintainers fixed the IDENTICAL pattern in Slack — `timingSafeStringEqual`
+  (adapter-slack/src/index.ts:106, called :1680) against a dedicated `socketForwardingSecret`
+  (:1025-1026 `?? appToken`). CHANGELOG (adapter-slack/CHANGELOG.md:329, changeset 9824d33):
+  "Replace timing-unsafe `!==` with `crypto.timingSafeEqual` when validating the `x-slack-socket-token`
+  header on forwarded socket-mode events." Discord's identical `!==` was MISSED. Every HMAC adapter +
+  telegram secret-token use timingSafeEqual; Discord gateway path is the lone hold-out.
+- NO fail-open here (resolveBotToken throws on empty). So the only bug is the non-constant-time compare.
+- HONEST caveat: practical exploit = REMOTE timing oracle over a high-entropy token → LOW practical
+  exploitability; H1 often marks remote-timing-only Informative. FILE on the differential + maintainer-
+  precedent narrative ("you fixed this in Slack, missed the identical `!==` in Discord"), NOT a working
+  timing PoC. Realistic Low-Med. Secondary candidate. Dup lead: changeset 9824d33; no GHSA located.
+- Precond: deployment uses Discord gateway-forwarding (external listener POSTs with x-discord-gateway-token).
+
+## Adapter coverage matrix (2026-08-31 sweep, all @ 4.38.1) — CLEARED except telegram + discord
+15 adapters. slack/messenger/instagram/whatsapp/github/x/notion/twilio/gchat/linear all FAIL-CLOSED on
+missing secret + constant-time compare + sign raw body; slack also enforces ±300s timestamp replay window.
+teams/linear delegate auth to 3rd-party SDK (out of scope). web = no inbound sig surface. No re-serialization
+desync, no algo-downgrade, no credentialed-SSRF, no secret logging/echo. Only telegram (fail-open, known)
+and discord (timing-unsafe `!==`, above) are weak.
